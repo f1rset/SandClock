@@ -24,7 +24,7 @@
  * (So called mode 00)
  * CRC Calculation -- disabled
  * NSS -- Software.
- *  Created on: 1 ñ³÷. 2017
+ *  Created on: 1 ï¿½ï¿½. 2017
  *      Author: indrekis
  */
 
@@ -32,7 +32,9 @@
 #define APPLICATION_USER_LCD5110_LL_H_
 
 #include <stdbool.h>
-
+//#include "stm32f1xx_hal.h"
+//#include "main.h"
+//#include "lcd5110.h"
 #include "spi.h"
 #include "gpio.h"
 

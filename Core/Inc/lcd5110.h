@@ -4,8 +4,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
 #include "lcd5110_ll.h"
 #include "lcd5110_hal.h"
+//#include "main.h"
 #include "spi.h"
 #include "gpio.h"
 
@@ -118,7 +120,7 @@ int LCD5110_wprintf( LCD5110_display* lcd_conf, int color, LCD5110_canvas_t* win
 inline void LCD5110_print(const char* str, int color, LCD5110_display* lcd_conf){
 	LCD5110_wprint(str, color, &lcd_conf->def_scr, lcd_conf);
 }
-//! TODO: Якось елегантніше це зробити -- поки простіше продублювати.
+//! TODO: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ -- пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 int LCD5110_printf( LCD5110_display* lcd_conf, int color, char *fmt, ...);
 
 
