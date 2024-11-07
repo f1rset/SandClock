@@ -18,10 +18,18 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
+#include "spi.h"
+#include "tim.h"
+#include "usart.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "lcd5110.h"
+#include <string.h>
+#include <stdio.h>
+#include "mpu6050.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,14 +49,12 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -57,6 +63,48 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 LCD5110_display lcd1;
 LCD5110_display lcd2;
+MPU6050_t MPU6050;
+// Global variable to track timer expiration
+volatile uint32_t elapsed_time_ms = 0;
+
+// Callback function for timer interrupt
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM1)  // Check if the interrupt is from TIM1
+    {
+        elapsed_time_ms++;
+        if (elapsed_time_ms % 1000 == 0)
+                {
+                    char message[50];
+                    // Format the elapsed time in seconds
+                    sprintf(message, "%lu seconds\n", elapsed_time_ms / 1000);
+//                    char message1[12];
+
+//                    sprintf(message1, "%d x,\n %d y,\n %d z\n", MPU6050.Gx, MPU6050.Gy, MPU6050.Gz);
+
+
+					LCD5110_clear_scr(&lcd2);
+					LCD5110_set_cursor(0, 20, &lcd2);
+
+
+                    LCD5110_print(message, BLACK, &lcd2);
+
+
+
+                    // Transmit over UART
+                    HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+                }// Set the flag to indicate timer expiration
+    }
+}
+void print_arr(uint8_t arr[84][48], LCD5110_conf* lcd){
+	for (int i = 0; i < 84; i++){
+		  for (int j = 0; j < 48; j++){
+			  LCD5110_putpix(i, j, arr[i][j], &lcd);
+		  }
+	  }
+	  LCD5110_refresh(&lcd);
+
+}
 /* USER CODE END 0 */
 
 /**
@@ -90,6 +138,9 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_SPI2_Init();
+  MX_TIM1_Init();
+  MX_USART1_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   lcd1.hw_conf.spi_handle = &hspi1;
   lcd1.hw_conf.spi_cs_pin =  LCD1_CS_Pin;
@@ -102,6 +153,7 @@ int main(void)
   LCD5110_init(&lcd1.hw_conf, LCD5110_NORMAL_MODE, 0x40, 2, 3);
 
   LCD5110_print("Hello world!\n", BLACK, &lcd1);
+  while(MPU6050_Init(&hi2c1)==1);
 
   lcd2.hw_conf.spi_handle = &hspi2;
   lcd2.hw_conf.spi_cs_pin =  LCD2_CS_Pin;
@@ -116,6 +168,21 @@ int main(void)
   LCD5110_set_cursor(20, 20, &lcd2);
   LCD5110_print("Hello world!\n", BLACK, &lcd2);
 
+  uint32_t time = 100000;
+
+
+
+  uint8_t message[] = "Hello from STM32!\r\n";
+  HAL_UART_Transmit(&huart1, message, sizeof(message), HAL_MAX_DELAY);
+  HAL_TIM_Base_Start_IT(&htim1);
+
+  LCD5110_clear_scr(&lcd1);
+
+  //  LCD5110_array(5, 5, 40, 40, &arr, &lcd1.hw_conf);
+//  LCD5110_fill_region(5, 5, 40, 40, 1, &lcd1.hw_conf);
+
+//  LCD5110_refresh(&lcd1);
+//  uint8_t message1[50];
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -123,8 +190,24 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  if (elapsed_time_ms % 1000 < 20){
+		  MPU6050_Read_All(&hi2c1, &MPU6050);
+		  LCD5110_clear_scr(&lcd1);
+		  LCD5110_set_cursor(0, 0, &lcd1);
+		  char message1[50];
 
+
+		  sprintf(message1, "%0.2f x,\n %0.2f y,\n %0.2f z\n",MPU6050.Ax, MPU6050.Ay, MPU6050.Az);
+		  LCD5110_print(message1, BLACK, &lcd1);
+
+
+	  }
     /* USER CODE BEGIN 3 */
+	  if (elapsed_time_ms >= time)
+	  {
+		  HAL_TIM_Base_Stop_IT(&htim1);
+	  }
+
   }
   /* USER CODE END 3 */
 }
@@ -144,7 +227,9 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI_DIV2;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL2;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -154,9 +239,9 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
@@ -165,12 +250,6 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief SPI1 Initialization Function
-  * @param None
-  * @retval None
-  */
-\
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */

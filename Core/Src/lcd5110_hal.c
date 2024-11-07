@@ -4,7 +4,7 @@
 /*
  * lcd5110_hal.c
  *
- *  Created on: 2 ��. 2017
+ *  Created on: 2 ��. 2017
  *      Author: indrekis
  */
 
@@ -80,6 +80,16 @@ void LCD5110_fill_region(int x0, int y0, int w, int h, int color, LCD5110_conf* 
 		for (int j = y0; j < y0+h; ++j)
 			LCD5110_putpix(i, j, color, lcd_conf);
 
+}
+
+
+void LCD5110_array(int x0, int y0, int w, int h, bool** arr, LCD5110_conf* lcd_conf) {
+	for (int i = 0; i < w; ++i) {
+			for (int j = 0; j < h; ++j) {
+				int color = arr[i][j]; // Отримуємо колір із масиву (0 або 1)
+				LCD5110_putpix(x0 + i, y0 + j, color, lcd_conf);
+			}
+		}
 }
 
 //! TODO: optimize! Slow!

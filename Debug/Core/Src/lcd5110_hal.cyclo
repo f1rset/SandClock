@@ -6,4 +6,5 @@
 ../Core/Src/lcd5110_hal.c:61:6:LCD5110_clrpix	5
 ../Core/Src/lcd5110_hal.c:69:6:LCD5110_invpix	5
 ../Core/Src/lcd5110_hal.c:78:6:LCD5110_fill_region	3
-../Core/Src/lcd5110_hal.c:87:6:LCD5110_drawBitmap	5
+../Core/Src/lcd5110_hal.c:86:6:LCD5110_array	3
+../Core/Src/lcd5110_hal.c:97:6:LCD5110_drawBitmap	5

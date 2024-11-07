@@ -11,7 +11,7 @@
 
 //#include "lcd5110_ll.h"
 //#include "lcd5110.h"
-
+void LCD5110_array(int x0, int y0, int w, int h,bool** arr, LCD5110_conf* lcd_conf);
 void LCD5110_clrscr(LCD5110_conf* lcd_conf);
 void LCD5110_fillscr(LCD5110_conf* lcd_conf);
 
