@@ -1,2 +1,6 @@
 *.elf
 Binaries/
+cmake-build-debug
+.idea
+CMakeLists.txt
+CMakeLists_template.txt

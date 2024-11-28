@@ -1,3 +1,4 @@
+"./Core/Src/SandClockF1rset.o"
 "./Core/Src/gpio.o"
 "./Core/Src/i2c.o"
 "./Core/Src/lcd5110.o"
