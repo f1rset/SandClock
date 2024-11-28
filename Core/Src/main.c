@@ -30,7 +30,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "mpu6050.h"
-#include "SandClockF1rset.h"
+#include "sandClockStruct.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -87,32 +87,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //
 //}
 
-void LCD5110_arr_out(int arr[48][48], int match, LCD5110_display *lcd){
-  for (int i = 0; i < 84; i++) {
-    for (int j = 0; j < 48; j++) {
-    	if (i < 48){
-    		LCD5110_putpix(i, 47-j, arr[i][j], &lcd->hw_conf);
-    	}
-    	else{
-    		LCD5110_putpix(i, 47-j, match, &lcd->hw_conf);
-    	}
+void LCD5110_arr_out(uint8_t arr[ROWS][COLS], int match, LCD5110_display *lcd){
+  for (int i = 0; i < COLS; i++) {
+    for (int j = 0; j < ROWS; j++) {
+        LCD5110_putpix(10+i, 47-j, arr[j][i], &lcd->hw_conf);
     }
   }
   LCD5110_refresh(lcd);
-}
-
-void invert_arr(int arr[48][48])
-{
-    int temp = 0;
-    for (int i = 0; i < 24; i++)
-    {
-        for (int j = 0; j < 48; j++)
-        {
-            temp = arr[i][j];
-            arr[i][j] = arr[47 - i][47 - j] == 1 ? 0 : 1;
-            arr[47 - i][47 - j] = temp == 1 ? 0 : 1;
-        }
-    }
 }
 
 /* USER CODE END 0 */
@@ -162,7 +143,6 @@ int main(void)
   lcd1.def_scr = lcd5110_def_scr;
   LCD5110_init(&lcd1.hw_conf, LCD5110_NORMAL_MODE, 0x40, 2, 3);
 
-  LCD5110_print("Hello world!\n", BLACK, &lcd1);
   while(MPU6050_Init(&hi2c1)==1);
 
   lcd2.hw_conf.spi_handle = &hspi2;
@@ -173,46 +153,36 @@ int main(void)
   lcd2.hw_conf.dc_pin =  LCD2_DC_Pin;
   lcd2.hw_conf.dc_port = LCD2_DC_GPIO_Port;
   lcd2.def_scr = lcd5110_def_scr;
-  LCD5110_init(&lcd2.hw_conf, LCD5110_INVERTED_MODE, 0x40, 2, 3);
+  LCD5110_init(&lcd2.hw_conf, LCD5110_NORMAL_MODE, 0x40, 2, 3);
 
-  LCD5110_set_cursor(20, 20, &lcd2);
-  LCD5110_print("Hello world!\n", BLACK, &lcd2);
-
-  time = 20000;
-
-  int maximum = (int)(48*48);
-  int sand[48][48];
-  for (int i = 0; i < 48; i++)
-  {
-      for (int j = 0; j < 48; j++)
-      {
-          sand[i][j] = 1;
-      }
-  }
+  time = 10120000;
 
 
-  uint8_t message[] = "Hello from STM32!\r\n";
-  HAL_UART_Transmit(&huart1, message, sizeof(message), HAL_MAX_DELAY);
   HAL_TIM_Base_Start_IT(&htim1);
+    SandClock clock;
+
+    generateDisplay(clock.display);
 
 //  LCD5110_clear_scr(&lcd1);
 //  LCD5110_clear_scr(&lcd1);
 //  LCD5110_arr_out(sand, 1, &lcd1);
-  //  LCD5110_array(5, 5, 40, 40, &arr, &lcd1.hw_conf);
+  //  LLCD5110_refreshCD5110_array(5, 5, 40, 40, &arr, &lcd1.hw_conf);
 //  LCD5110_fill_region(5, 5, 40, 40, 1, &lcd1.hw_conf);
 
-//  LCD5110_refresh(&lcd1);
+//  (&lcd1);
 //  uint8_t message1[50];
   /* USER CODE END 2 */
 
   /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  int counter = (int) (maximum/(time/1000));
-  counter++;
-  int temp = 1;
-  while (1)
+    /* USER CODE BEGIN WHILE */
+    int constd = (int)(time/2351);
+    int temp = 1;
+    uint8_t temp_display[ROWS][COLS];
+    uint8_t upper_display[ROWS][COLS];
+    uint8_t bottom_display[ROWS][COLS];
+    while (1)
   {
-    /* USER CODE END WHILE */
+      /* USER CODE END WHILE */
 //	  MPU6050_Read_All(&hi2c1, &MPU6050);
 //	  		  if (z > 0 && MPU6050.Az < 0){
 //	  			  for (int i = 0; i<48; i++){
@@ -231,8 +201,7 @@ int main(void)
 //	  			  time = elapsed_time_s;
 //	  			  elapsed_time_s = 0;
 //	  		  }
-	  if (elapsed_time_s % 10 == 0){
-
+//      if (elapsed_time_s % 1 == 0){
 //	if (elapsed_time_s % 1000 == 0){
 ////			  char message[50];
 ////			  sprintf(message, "%lu seconds\n", elapsed_time_s / 1000);
@@ -240,30 +209,7 @@ int main(void)
 ////			  LCD5110_set_cursor(0, 20, &lcd1);
 ////			  LCD5110_print(message, BLACK, &lcd1);
 ////			  HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
-		for (int i =0; i<counter; i++){
-			drop_sand(sand, 0);
-//			build_sand(sand, 0);
-		}
-		MPU6050_Read_Accel(&hi2c1, &MPU6050);
-				  if (temp > 0 && MPU6050.Az < 0){
-					  invert_arr(sand);
-					  temp = -1;
-					  LCD5110_init(&lcd1.hw_conf, LCD5110_INVERTED_MODE, 0x40, 2, 3);
-					  LCD5110_init(&lcd2.hw_conf, LCD5110_NORMAL_MODE, 0x40, 2, 3);
 
-		  			  elapsed_time_s = time - elapsed_time_s;
-				  }
-				  if (temp < 0 && MPU6050.Az > 0){
-				  			 invert_arr(sand);
-				  			  temp = 1;
-				  			  LCD5110_init(&lcd1.hw_conf, LCD5110_NORMAL_MODE, 0x40, 2, 3);
-				  			  LCD5110_init(&lcd2.hw_conf, LCD5110_INVERTED_MODE, 0x40, 2, 3);
-				  			  elapsed_time_s = time - elapsed_time_s;
-				  }
-	    LCD5110_clear_scr(&lcd2);
-	    LCD5110_arr_out(sand, temp > 0 ? 1:0, &lcd2);
-	    LCD5110_clear_scr(&lcd1);
-	    LCD5110_arr_out(sand, temp > 0 ? 0:1, &lcd1);
 //		  }
 //		  MPU6050_Read_All(&hi2c1, &MPU6050);
 //		  LCD5110_clear_scr(&lcd1);
@@ -271,8 +217,41 @@ int main(void)
 //		  char message1[50];
 //		  sprintf(message1, "%0.2f x,\n %0.2f y,\n %0.2f z\n",MPU6050.Ax, MPU6050.Ay, MPU6050.Az);
 //		  LCD5110_print(message1, BLACK, &lcd1);
-	  }
+//	  }
     /* USER CODE BEGIN 3 */
+    if (elapsed_time_s % 1 == 0){
+    	MPU6050_Read_Accel(&hi2c1, &MPU6050);
+    	          if (temp > 0 && MPU6050.Az < -0.3){
+    	            inverseMatrix(clock.display, clock.display);
+    	            for (int i = 0; i<ROWS; i++){
+    	                update(clock.display);
+    	            }
+    	        }
+    	          if (temp < 0 && MPU6050.Az > 0.3){
+    	            inverseMatrix(clock.display, clock.display);
+    	            for (int i = 0; i<ROWS; i++){
+    	                update(clock.display);
+    	            }
+    	        }
+
+    	          sandTick(clock.display);
+    	          update(clock.display);
+    	          drawLines(clock.display, upper_display);
+    	          inverseMatrix(clock.display, temp_display);
+    	          drawLines(temp_display, bottom_display);
+        if (temp < 0){
+            LCD5110_clear_scr(&lcd1);
+            LCD5110_clear_scr(&lcd2);
+            LCD5110_arr_out(upper_display, 1, &lcd1);
+            LCD5110_arr_out(bottom_display, 1, &lcd2);
+        }
+        if (temp > 0){
+            LCD5110_clear_scr(&lcd1);
+            LCD5110_clear_scr(&lcd2);
+            LCD5110_arr_out(upper_display, 1, &lcd2);
+            LCD5110_arr_out(bottom_display, 1, &lcd1);
+        }
+    }
 	  if (elapsed_time_s >= time)
 	  {
 //		  char message[50];
@@ -281,13 +260,6 @@ int main(void)
 //		  	    LCD5110_set_cursor(0, 20, &lcd1);
 //		  	    LCD5110_print(message, BLACK, &lcd1);
 		  HAL_TIM_Base_Stop_IT(&htim1);
-		  for (int i =0; i<counter; i++){
-		  			drop_sand(sand, 0);
-		  }
-		  LCD5110_clear_scr(&lcd2);
-		  LCD5110_arr_out(sand, 1, &lcd2);
-		  LCD5110_clear_scr(&lcd1);
-		  LCD5110_arr_out(sand, 0, &lcd1);
 	  }
 
   }

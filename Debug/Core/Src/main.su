@@ -1,6 +1,5 @@
 ../Core/Src/main.c:73:6:HAL_TIM_PeriodElapsedCallback	16	static
 ../Core/Src/main.c:90:6:LCD5110_arr_out	32	static
-../Core/Src/main.c:104:6:invert_arr	32	static
-../Core/Src/main.c:124:5:main	9288	static
-../Core/Src/main.c:302:6:SystemClock_Config	72	static
-../Core/Src/main.c:344:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:105:5:main	12344	static
+../Core/Src/main.c:273:6:SystemClock_Config	72	static
+../Core/Src/main.c:315:6:Error_Handler	4	static,ignoring_inline_asm

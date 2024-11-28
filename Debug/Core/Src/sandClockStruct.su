@@ -1,0 +1,5 @@
+../Core/Src/sandClockStruct.c:7:6:inverseMatrix	24	static
+../Core/Src/sandClockStruct.c:15:6:drawLines	32	static
+../Core/Src/sandClockStruct.c:30:6:generateDisplay	24	static
+../Core/Src/sandClockStruct.c:39:6:sandTick	16	static
+../Core/Src/sandClockStruct.c:43:6:update	24	static
