@@ -1,5 +1,6 @@
-../Core/Src/main.c:71:6:HAL_TIM_PeriodElapsedCallback	3
-../Core/Src/main.c:99:6:print_arr	3
-../Core/Src/main.c:114:5:main	4
-../Core/Src/main.c:219:6:SystemClock_Config	3
-../Core/Src/main.c:261:6:Error_Handler	1
+../Core/Src/main.c:73:6:HAL_TIM_PeriodElapsedCallback	2
+../Core/Src/main.c:90:6:LCD5110_arr_out	4
+../Core/Src/main.c:104:6:invert_arr	3
+../Core/Src/main.c:124:5:main	12
+../Core/Src/main.c:302:6:SystemClock_Config	3
+../Core/Src/main.c:344:6:Error_Handler	1

@@ -29,7 +29,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/i2c.h ../Core/Inc/main.h ../Core/Inc/spi.h ../Core/Inc/tim.h \
  ../Core/Inc/usart.h ../Core/Inc/gpio.h ../Core/Inc/lcd5110.h \
  ../Core/Inc/lcd5110_ll.h ../Core/Inc/spi.h ../Core/Inc/gpio.h \
- ../Core/Inc/lcd5110_hal.h ../Core/Inc/mpu6050.h ../Core/Inc/i2c.h
+ ../Core/Inc/lcd5110_hal.h ../Core/Inc/mpu6050.h ../Core/Inc/i2c.h \
+ ../Core/Inc/SandClockF1rset.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
 ../Core/Inc/stm32f1xx_hal_conf.h:
@@ -71,3 +72,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/lcd5110_hal.h:
 ../Core/Inc/mpu6050.h:
 ../Core/Inc/i2c.h:
+../Core/Inc/SandClockF1rset.h:
