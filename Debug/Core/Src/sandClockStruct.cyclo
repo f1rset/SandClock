@@ -1,5 +1,0 @@
-../Core/Src/sandClockStruct.c:7:6:inverseMatrix	3
-../Core/Src/sandClockStruct.c:15:6:drawLines	4
-../Core/Src/sandClockStruct.c:30:6:generateDisplay	3
-../Core/Src/sandClockStruct.c:39:6:sandTick	1
-../Core/Src/sandClockStruct.c:43:6:update	11

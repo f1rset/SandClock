@@ -1,2 +1,6 @@
-../Core/Src/SandClockF1rset.c:6:6:drop_sand	32	static
-../Core/Src/SandClockF1rset.c:22:6:build_sand	32	static
+../Core/Src/SandClockF1rset.c:3:6:generate_displays	24	static
+../Core/Src/SandClockF1rset.c:11:6:sandTick	16	static
+../Core/Src/SandClockF1rset.c:20:6:update	24	static
+../Core/Src/SandClockF1rset.c:56:6:drawLines	32	static
+../Core/Src/SandClockF1rset.c:68:6:updateBottom	24	static
+../Core/Src/SandClockF1rset.c:152:6:rotate	32	static
