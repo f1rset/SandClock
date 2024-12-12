@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  0001a9a9  00000000  00000000  0002628f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00017c15  00000000  00000000  00040c38  2**0
+ 17 .debug_line   00017c17  00000000  00000000  00040c38  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00092618  00000000  00000000  0005884d  2**0
+ 18 .debug_str    00092618  00000000  00000000  0005884f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000eae65  2**0
+ 19 .comment      00000043  00000000  00000000  000eae67  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00006ae8  00000000  00000000  000eaea8  2**2
+ 20 .debug_frame  00006ae8  00000000  00000000  000eaeac  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000063  00000000  00000000  000f1990  2**0
+ 21 .debug_line_str 00000063  00000000  00000000  000f1994  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -3692,6 +3692,7 @@ int main(void)
   generate_displays(&clock);
  8001e6e:	4853      	ldr	r0, [pc, #332]	@ (8001fbc <main+0x228>)
  8001e70:	f7ff f90e 	bl	8001090 <generate_displays>
+//  uint8_t message1[50];
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -168,6 +168,16 @@ int main(void)
 //  time = 10120000;
 
   generate_displays(&clock);
+
+//  HAL_TIM_Base_Start_IT(&htim1);
+//  LCD5110_clear_scr(&lcd1);
+//  LCD5110_clear_scr(&lcd1);
+//  LCD5110_arr_out(sand, 1, &lcd1);
+  //  LLCD5110_refreshCD5110_array(5, 5, 40, 40, &arr, &lcd1.hw_conf);
+//  LCD5110_fill_region(5, 5, 40, 40, 1, &lcd1.hw_conf);
+
+//  (&lcd1);
+//  uint8_t message1[50];
   /* USER CODE END 2 */
 
   /* Infinite loop */
