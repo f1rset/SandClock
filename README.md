@@ -47,12 +47,17 @@ Programming language **C**.
 ![image](https://github.com/user-attachments/assets/65e82fff-2d46-4426-8f05-ae18295fb2dd)
 
 
-Display Technology	Dot Matrix LCD
-MCU Interface	SPI
-Screen Size	1.5 Inch Across
-Resolution	84×48 pixels
-Operating Voltage	2.7V – 3.3V
-Operating Current	50mA max
+Display Technology:	Dot Matrix LCD
+
+MCU Interface:	SPI
+
+Screen Size:	1.5 Inch Across
+
+Resolution:	84×48 pixels
+
+Operating Voltage:	2.7V – 3.3V
+
+Operating Current:	50mA max
 
 ### Configuration
 
